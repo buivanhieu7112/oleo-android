@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,18 +21,32 @@ import com.framgia.oleo.databinding.FragmentLoginBinding
 import com.framgia.oleo.screen.home.HomeFragment
 import com.framgia.oleo.screen.signup.SignUpFragment
 import com.framgia.oleo.utils.Constant.MIN_CHARACTER_INPUT_PASSWORD
-import com.framgia.oleo.utils.extension.*
+import com.framgia.oleo.utils.extension.isCheckClickableButtonClick
+import com.framgia.oleo.utils.extension.isCheckMultiClick
+import com.framgia.oleo.utils.extension.replaceFragment
+import com.framgia.oleo.utils.extension.showSnackBar
+import com.framgia.oleo.utils.extension.validInputPassword
+import com.framgia.oleo.utils.extension.validInputPhoneNumber
 import com.framgia.oleo.utils.liveData.autoCleared
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.fragment_login.*
-import java.util.*
+import kotlinx.android.synthetic.main.fragment_login.buttonLogin
+import kotlinx.android.synthetic.main.fragment_login.buttonLoginFB
+import kotlinx.android.synthetic.main.fragment_login.editTextPassword
+import kotlinx.android.synthetic.main.fragment_login.editTextPhoneNumber
+import kotlinx.android.synthetic.main.fragment_login.textLayoutPassWord
+import kotlinx.android.synthetic.main.fragment_login.textLayoutPhoneNumber
+import kotlinx.android.synthetic.main.fragment_login.textViewLoginFB
+import kotlinx.android.synthetic.main.fragment_login.textViewLoginGG
+import kotlinx.android.synthetic.main.fragment_login.textViewSignUp
+import java.util.Arrays
 
 class LoginFragment : BaseFragment(), View.OnClickListener {
 
@@ -76,11 +89,25 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
             R.id.textViewLoginFB -> if (isCheckMultiClick()) buttonLoginFB.performClick()
             R.id.textViewLoginGG -> if (isCheckMultiClick()) signInWithGoogle()
             R.id.buttonLogin -> signWithPhoneNumberAndPassword()
-            R.id.textViewSignUp -> if (isCheckMultiClick()) SignUpFragment.newInstance().show(
-                fragmentManager,
-                TAG_DIALOG
-            )
+            R.id.textViewSignUp -> {
+                if (isCheckMultiClick()) {
+                    val fragment = SignUpFragment.newInstance()
+                    fragment.onResultWhenLoginSuccess = { phoneNumber -> onResultSignUpSuccess(phoneNumber) }
+                    fragment.show(
+                        fragmentManager, TAG_DIALOG
+                    )
+                }
+            }
         }
+    }
+
+    private fun onResultSignUpSuccess(phoneNumberSignUp: String) {
+        binding.editTextPhoneNumber.text = Editable.Factory.getInstance().newEditable(phoneNumberSignUp)
+        Snackbar.make(
+            editTextPhoneNumber,
+            String.format(getString(R.string.message_result_sign_up_success), phoneNumberSignUp),
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 
     private fun signInWithFacebook() {
@@ -109,25 +136,24 @@ class LoginFragment : BaseFragment(), View.OnClickListener {
         if (!onCheckValidateFormLogin()) {
             return;
         }
-        viewModel.signInWithPhoneNumber(editTextPhoneNumber.text.toString(),
-            object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (!dataSnapshot.exists()) {
-                        view?.showSnackBar(getString(R.string.phone_number_invalid))
-                        return
-                    }
-                    if (dataSnapshot.child(PASSWORD).getValue().toString() != editTextPassword.text.toString()) {
-                        view?.showSnackBar(getString(R.string.password_invalid))
-                        return
-                    }
-                    viewModel.insertUser(dataSnapshot.getValue(User::class.java)!!)
-                    replaceFragment(R.id.containerMain, HomeFragment.newInstance())
+        viewModel.signInWithPhoneNumber(editTextPhoneNumber.text.toString(), object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    view?.showSnackBar(getString(R.string.phone_number_invalid))
+                    return
                 }
+                if (dataSnapshot.child(PASSWORD).getValue().toString() != editTextPassword.text.toString()) {
+                    view?.showSnackBar(getString(R.string.password_invalid))
+                    return
+                }
+                viewModel.insertUser(dataSnapshot.getValue(User::class.java)!!)
+                replaceFragment(R.id.containerMain, HomeFragment.newInstance())
+            }
 
-                override fun onCancelled(error: DatabaseError) {
-                    view?.showSnackBar(getString(R.string.login_failed))
-                }
-            })
+            override fun onCancelled(error: DatabaseError) {
+                view?.showSnackBar(getString(R.string.login_failed))
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

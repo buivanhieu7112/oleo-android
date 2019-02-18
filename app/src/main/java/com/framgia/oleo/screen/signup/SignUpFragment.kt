@@ -16,13 +16,32 @@ import com.framgia.oleo.data.source.model.User
 import com.framgia.oleo.databinding.FragmentSignupBinding
 import com.framgia.oleo.utils.Constant.MIN_CHARACTER_INPUT_PASSWORD
 import com.framgia.oleo.utils.di.Injectable
-import com.framgia.oleo.utils.extension.*
+import com.framgia.oleo.utils.extension.createDialog
+import com.framgia.oleo.utils.extension.isCheckClickableImageButtonClick
+import com.framgia.oleo.utils.extension.isCheckMultiClick
+import com.framgia.oleo.utils.extension.validInputConfirmPassword
+import com.framgia.oleo.utils.extension.validInputEmail
+import com.framgia.oleo.utils.extension.validInputPassword
+import com.framgia.oleo.utils.extension.validInputPhoneNumber
+import com.framgia.oleo.utils.extension.validInputUserName
 import com.framgia.oleo.utils.liveData.autoCleared
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.android.synthetic.main.fragment_signup.buttonClose
+import kotlinx.android.synthetic.main.fragment_signup.buttonSignUp
+import kotlinx.android.synthetic.main.fragment_signup.textInputConfirmPassword
+import kotlinx.android.synthetic.main.fragment_signup.textInputEmail
+import kotlinx.android.synthetic.main.fragment_signup.textInputPassword
+import kotlinx.android.synthetic.main.fragment_signup.textInputPhoneNumber
+import kotlinx.android.synthetic.main.fragment_signup.textInputUserName
+import kotlinx.android.synthetic.main.fragment_signup.textLayoutConfirmPassword
+import kotlinx.android.synthetic.main.fragment_signup.textLayoutEmail
+import kotlinx.android.synthetic.main.fragment_signup.textLayoutPassword
+import kotlinx.android.synthetic.main.fragment_signup.textLayoutPhoneNumber
+import kotlinx.android.synthetic.main.fragment_signup.textLayoutUserName
+import kotlinx.android.synthetic.main.fragment_signup.textMessageSignUp
 import javax.inject.Inject
 
 class SignUpFragment : DialogFragment(), Injectable, View.OnClickListener {
@@ -34,9 +53,10 @@ class SignUpFragment : DialogFragment(), Injectable, View.OnClickListener {
 
     private var binding by autoCleared<FragmentSignupBinding>()
 
+    var onResultWhenLoginSuccess: ((message: String) -> Unit)? = null
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         return binding.root
@@ -68,16 +88,21 @@ class SignUpFragment : DialogFragment(), Injectable, View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.buttonClose -> if (isCheckMultiClick()) dismiss() // Todo dismiss diaLog Fragment
-            R.id.buttonSignUp -> onCheckValidateFormAndSignUp()
+            R.id.buttonSignUp -> if (isCheckMultiClick()) {
+                textMessageSignUp.text = ""
+                onCheckValidateFormAndSignUp()
+            }
         }
     }
 
     private fun onCheckValidateFormAndSignUp() {
-        if (validInputUserName(context!!, textInputUserName.text.toString(), textLayoutUserName) &&
-            validInputEmail(context!!, textInputEmail.text.toString(), textLayoutEmail) &&
-            validInputPhoneNumber(context!!, textInputPhoneNumber.text.toString(), textLayoutPhoneNumber) &&
-            validInputPassword(context!!, textInputPassword.text.toString(), textLayoutPassword) &&
-            validInputConfirmPassword(
+        if (validInputUserName(context!!, textInputUserName.text.toString(), textLayoutUserName) && validInputEmail(
+                context!!, textInputEmail.text.toString(), textLayoutEmail
+            ) && validInputPhoneNumber(
+                context!!, textInputPhoneNumber.text.toString(), textLayoutPhoneNumber
+            ) && validInputPassword(
+                context!!, textInputPassword.text.toString(), textLayoutPassword
+            ) && validInputConfirmPassword(
                 context!!,
                 textInputPassword.text.toString(),
                 textInputConfirmPassword.text.toString(),
@@ -106,13 +131,15 @@ class SignUpFragment : DialogFragment(), Injectable, View.OnClickListener {
                 user.phoneNumber = textInputPhoneNumber.text.toString()
 
                 FirebaseDatabase.getInstance().getReference(USER_TABLE_FIRE_BASE)
-                    .child(FirebaseAuth.getInstance().currentUser!!.uid)
-                    .setValue(user).addOnCompleteListener(activity!!) { result ->
+                    .child(FirebaseAuth.getInstance().currentUser!!.uid).setValue(user)
+                    .addOnCompleteListener(activity!!) { result ->
                         progressDialog.dismiss()
-                        if (result.isSuccessful) view!!.showSnackBar(getString(R.string.sign_up_success))
-                        else view!!.showSnackBar(getString(R.string.sign_up_fail))
+                        if (result.isSuccessful) {
+                            onResultWhenLoginSuccess!!.invoke(textInputPhoneNumber.text.toString())
+                            dismiss()
+                        } else textMessageSignUp.text = getString(R.string.sign_up_fail)
                     }
-            } else view!!.showSnackBar(task.exception!!.message.toString())
+            } else textMessageSignUp.text = task.exception!!.message.toString()
         }
     }
 
@@ -145,16 +172,13 @@ class SignUpFragment : DialogFragment(), Injectable, View.OnClickListener {
     }
 
     private fun onSetEnableButtonLogin(
-        textUserName: String, textEmail: String,
-        textPhoneNumber: String, textPassword: String,
+        textUserName: String,
+        textEmail: String,
+        textPhoneNumber: String,
+        textPassword: String,
         textConfirmPassword: String
     ) {
-        if (textUserName.isNotBlank()
-            && textEmail.isNotBlank()
-            && textPhoneNumber.isNotBlank()
-            && textPassword.length >= MIN_CHARACTER_INPUT_PASSWORD
-            && textConfirmPassword.length >= MIN_CHARACTER_INPUT_PASSWORD
-        ) {
+        if (textUserName.isNotBlank() && textEmail.isNotBlank() && textPhoneNumber.isNotBlank() && textPassword.length >= MIN_CHARACTER_INPUT_PASSWORD && textConfirmPassword.length >= MIN_CHARACTER_INPUT_PASSWORD) {
             buttonSignUp.isEnabled = true
             buttonSignUp.setBackgroundResource(R.drawable.button_sign_up_bg)
         } else {

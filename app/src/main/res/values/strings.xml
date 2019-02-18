@@ -43,4 +43,5 @@
     <string name="login_failed">Login failed</string>
     <string name="phone_number_invalid">Phone number is not correct! Please check again</string>
     <string name="password_invalid">Password is not correct! Please check again</string>
+    <string name="message_result_sign_up_success">You have successfully registered with the login account name : %s</string>
 </resources>

@@ -68,5 +68,5 @@ fun String.checkUserNamePattern(): Boolean {
 }
 
 const val PASSWORD_PATTERN = "^[a-zA-Z0-9]*$"
-const val PHONE_PATTERN = "(09|01[2|3|4|5|6|7|8|9|0|1])([0-9]{8})\\b"
-const val USER_NAME_PATTERN = "^[a-zA-Z0-9]([._](?![._])|[a-zA-Z0-9]){6,18}[a-zA-Z0-9]\$"
+const val PHONE_PATTERN = "(09|01|03|07|08|05[2|3|4|5|6|7|8|9|0|1])([0-9]{8})\\b"
+const val USER_NAME_PATTERN = "^[a-zA-Z0-9]([._](?![._])|[a-zA-Z0-9]){1,18}[a-zA-Z0-9]\$"
