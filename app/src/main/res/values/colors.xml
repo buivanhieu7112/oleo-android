@@ -9,6 +9,7 @@
     <color name="colorEditText">#bebebe</color>
     <color name="colorFbBg">#3a5696</color>
     <color name="colorGgBg">#d33038</color>
+    <color name="colorWhite">#ffffff</color>
     <color name="colorGrey100">#F5F5F5</color>
     <color name="colorGrey500">#9e9e9e</color>
     <color name="colorGrey400">#bdbdbd</color>
