@@ -1,7 +1,7 @@
 package com.framgia.oleo.screen.signup
 
+import android.app.AlertDialog
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -118,7 +118,7 @@ class SignUpFragment : DialogFragment(), Injectable, View.OnClickListener {
         fireBase = FirebaseAuth.getInstance()
         val email = textInputEmail.text.toString()
         val password = textInputPassword.text.toString()
-        val progressDialog = ProgressDialog(context)
+        val progressDialog = AlertDialog.Builder(context).setView(R.layout.layout_progress_dialog).create()
 
         fireBase.createUserWithEmailAndPassword(email, password).addOnCompleteListener(
             activity!!
