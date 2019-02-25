@@ -4,7 +4,7 @@
   
   <item
       android:id="@+id/newMessage"
-      android:icon="@drawable/ic_add_circle_outline_white_24dp"
+      android:icon="@drawable/ic_add"
       android:title="@string/newMessage"
       app:showAsAction="always"/>
 </menu>

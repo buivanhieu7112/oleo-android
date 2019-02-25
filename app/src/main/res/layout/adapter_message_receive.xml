@@ -61,9 +61,10 @@
   <ImageView
       android:id="@+id/imageReceiveMessage"
       android:layout_width="@dimen/dp_32"
+      app:layout_constraintTop_toTopOf="parent"
       android:layout_height="@dimen/dp_32"
       android:layout_marginStart="@dimen/dp_10"
-      android:src="@drawable/no_profile"
+      android:src="@drawable/ic_user_circle"
       app:layout_constraintBottom_toBottomOf="@id/cardViewReceiveMessage"
       app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

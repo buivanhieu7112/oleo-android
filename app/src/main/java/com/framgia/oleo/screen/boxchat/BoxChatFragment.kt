@@ -25,8 +25,10 @@ import kotlinx.android.synthetic.main.fragment_boxchat.buttonSend
 import kotlinx.android.synthetic.main.fragment_boxchat.editSendMessage
 import kotlinx.android.synthetic.main.fragment_boxchat.recyclerViewBoxChat
 import kotlinx.android.synthetic.main.fragment_boxchat.swipeRefreshBoxChat
+import kotlinx.android.synthetic.main.fragment_boxchat.textTitleChatBox
 import kotlinx.android.synthetic.main.fragment_boxchat.toolbarBoxChat
 
+@Suppress("DEPRECATION")
 class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
 
     private lateinit var viewModel: BoxChatViewModel
@@ -59,7 +61,8 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
         setHasOptionsMenu(true)
         (activity as MainActivity).setSupportActionBar(toolbarBoxChat)
         (activity as MainActivity).supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        (activity as MainActivity).supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_keyboard_arrow_left_black_24dp)
+        (activity as MainActivity).supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_back)
+        (activity as MainActivity).supportActionBar!!.title = ""
         adapter = BoxChatAdapter()
         recyclerView = recyclerViewBoxChat
         swipeRefreshLayout = swipeRefreshBoxChat
@@ -87,7 +90,7 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
         boxChat = arguments!!.getParcelable(ARGUMENT_ROOM_ID)!!
         viewModel.getFriendImageProfile(boxChat.userFriendId!!)
         viewModel.getMessage(boxChat.id!!)
-        (activity as MainActivity).supportActionBar!!.title = boxChat.userFriendName
+        textTitleChatBox.text = boxChat.userFriendName
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -127,10 +130,10 @@ class BoxChatFragment : BaseFragment(), TextWatcher, View.OnClickListener {
     private fun onSetEnableButtonSend(textPhone: String) {
         if (textPhone.isNotBlank()) {
             buttonSend.isEnabled = true
-            buttonSend.setBackgroundResource(R.drawable.ic_sent_message_enable)
+            buttonSend.backgroundTintList = resources.getColorStateList(R.color.colorMessageBackground)
         } else {
             buttonSend.isEnabled = false
-            buttonSend.setBackgroundResource(R.drawable.ic_sent_message_disable)
+            buttonSend.backgroundTintList = resources.getColorStateList(R.color.colorGrey400)
         }
     }
 

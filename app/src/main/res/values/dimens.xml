@@ -32,4 +32,5 @@
     <dimen name="dp_350">350dp</dimen>
     <dimen name="sp_10">10sp</dimen>
     <dimen name="sp_25">25sp</dimen>
+    <dimen name="dp_6">6dp</dimen>
 </resources>

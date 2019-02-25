@@ -14,7 +14,7 @@ class BindingUtils {
         @JvmStatic
         fun setImageUrl(image: ImageView, uri: String?) {
             Glide.with(image.context).load(uri)
-                .apply(RequestOptions().circleCrop().placeholder(R.drawable.no_profile))
+                .apply(RequestOptions().circleCrop().placeholder(R.drawable.ic_user_circle))
                 .into(image)
         }
 
