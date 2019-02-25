@@ -36,16 +36,17 @@
 
                 <TextView
                     android:id="@+id/textViewAddress"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_12"
+                    android:ellipsize="end"
                     android:fontFamily="serif"
-                    android:maxLength="42"
                     android:maxLines="1"
                     android:text="@{viewModel.location.address}"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/sp_14"
+                    android:textSize="@dimen/sp_12"
                     app:layout_constraintBottom_toTopOf="@id/textViewDateTime"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/imageViewLocation"
                     app:layout_constraintTop_toTopOf="@id/imageViewLocation" />
 

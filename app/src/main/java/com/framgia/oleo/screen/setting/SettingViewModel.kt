@@ -31,7 +31,7 @@ class SettingViewModel @Inject constructor(
         place.longitude = location.longitude.toString()
         place.address = address
         place.time = time
-        userRepository.pushUserLocation(userRepository.getUser()!!.id, place)
+        userRepository.pushUserLocation(userRepository.getUser()!!.id, id, place)
     }
 
     companion object {

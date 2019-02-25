@@ -12,7 +12,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorSettingGb">
+        android:background="@color/colorSettingGb"
+        android:clickable="true"
+        android:focusable="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/locationToolbar"

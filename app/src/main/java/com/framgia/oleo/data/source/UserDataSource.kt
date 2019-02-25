@@ -4,6 +4,7 @@ import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.data.source.model.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.ValueEventListener
 
 interface UserDataSource {
@@ -18,7 +19,7 @@ interface UserDataSource {
     }
 
     interface Remote {
-        fun pushUserLocation(id: String, place: Place)
+        fun pushUserLocation(idUser: String, idPlace: String, place: Place)
 
         fun getUserByPhoneNumber(phoneNumber: String, valueEventListener: ValueEventListener)
 
@@ -29,5 +30,7 @@ interface UserDataSource {
         )
 
         fun getUsers(valueEventListener: ValueEventListener)
+
+        fun getFriendLocation(id: String, childEventListener: ChildEventListener)
     }
 }

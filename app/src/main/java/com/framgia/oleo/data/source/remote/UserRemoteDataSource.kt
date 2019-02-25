@@ -3,9 +3,11 @@ package com.framgia.oleo.data.source.remote
 import com.framgia.oleo.data.source.UserDataSource
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.data.source.model.User
+import com.framgia.oleo.screen.location.LocationViewModel
 import com.framgia.oleo.utils.Constant
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
@@ -17,11 +19,11 @@ class UserRemoteDataSource : UserDataSource.Remote {
             .addValueEventListener(valueEventListener)
     }
 
-    override fun pushUserLocation(id: String, place: Place) {
+    override fun pushUserLocation(idUser: String, idPlace: String, place: Place) {
         firebaseDatabase.getReference(Constant.PATH_STRING_USER)
-            .child(id)
+            .child(idUser)
             .child(Constant.PATH_STRING_PLACE)
-            .child(id)
+            .child(idPlace)
             .setValue(place)
     }
 
@@ -41,5 +43,13 @@ class UserRemoteDataSource : UserDataSource.Remote {
             .setValue(user)
             .addOnCompleteListener(onCompleteListener)
             .addOnFailureListener(onFailureListener)
+    }
+
+    override fun getFriendLocation(id: String, childEventListener: ChildEventListener) {
+        firebaseDatabase.getReference(Constant.PATH_STRING_USER)
+            .child(id)
+            .child(Constant.PATH_STRING_PLACE)
+            .limitToLast(LocationViewModel.LIMIT_DATA)
+            .addChildEventListener(childEventListener)
     }
 }

@@ -7,18 +7,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.framgia.oleo.R
 import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.databinding.AdapterLocationBinding
+import com.framgia.oleo.utils.Constant
 
 class LocationAdapter : RecyclerView.Adapter<LocationAdapter.Companion.LocationHolder>() {
-    private var places: MutableList<Place> = arrayListOf()
+    private var places: MutableList<Place> = mutableListOf()
 
-    fun updateData(places: MutableList<Place>) {
-        this.places.addAll(places)
-        notifyDataSetChanged()
+    fun updateData(place: Place) {
+        places.add(place)
+        notifyItemInserted(places.lastIndex - Constant.DEFAULT_ONE)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationHolder {
         val binding: AdapterLocationBinding =
-                DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.adapter_location, parent, false)
+            DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.adapter_location, parent, false)
         return LocationHolder(binding)
     }
 

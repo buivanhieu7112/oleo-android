@@ -4,6 +4,7 @@ import com.framgia.oleo.data.source.model.Place
 import com.framgia.oleo.data.source.model.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.ValueEventListener
 
 class UserRepository(
@@ -15,8 +16,8 @@ class UserRepository(
         remote.getUsers(valueEventListener)
     }
 
-    override fun pushUserLocation(id: String, place: Place) {
-        remote.pushUserLocation(id, place)
+    override fun pushUserLocation(idUser: String, idPlace: String, place: Place) {
+        remote.pushUserLocation(idUser, idPlace, place)
     }
 
     override fun registerUser(
@@ -45,5 +46,9 @@ class UserRepository(
 
     override fun updateUser(vararg users: User) {
         return local.updateUser(*users)
+    }
+
+    override fun getFriendLocation(id: String, childEventListener: ChildEventListener) {
+        remote.getFriendLocation(id, childEventListener)
     }
 }
