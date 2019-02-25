@@ -22,4 +22,6 @@
     <color name="colorMessageBackground">#5F7FF3</color>
     <color name="colorSwitchNotification">#8983FF</color>
     <color name="colorSwitchBlockUser">#75A5E9</color>
+    <color name="colorGrey200">#EEEEEE</color>
+    <color name="colorGrey900">#212121</color>
 </resources>

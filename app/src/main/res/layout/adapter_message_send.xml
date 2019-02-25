@@ -63,7 +63,8 @@
             android:layout_width="@dimen/dp_32"
             android:layout_height="@dimen/dp_32"
             android:layout_marginEnd="@dimen/dp_10"
-            android:src="@drawable/no_profile"
+        app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_user_circle"
             app:layout_constraintBottom_toBottomOf="@id/cardViewSendMessage"
             app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

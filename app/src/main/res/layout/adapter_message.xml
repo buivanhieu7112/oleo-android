@@ -22,7 +22,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp_5">
+        android:padding="@dimen/dp_12">
 
       <ImageView
           android:id="@+id/imageProfile"
@@ -36,9 +36,11 @@
       <TextView
           android:id="@+id/textFriendName"
           android:layout_width="0dp"
+          android:textColor="@color/colorGrey900"
           android:layout_height="wrap_content"
           android:layout_marginStart="@dimen/dp_10"
-          android:textSize="@dimen/sp_16"
+          android:textSize="@dimen/sp_18"
+          android:fontFamily="serif"
           app:layout_constraintBottom_toTopOf="@id/textMessage"
           app:layout_constraintEnd_toStartOf="@id/textTime"
           app:layout_constraintStart_toEndOf="@id/imageProfile"

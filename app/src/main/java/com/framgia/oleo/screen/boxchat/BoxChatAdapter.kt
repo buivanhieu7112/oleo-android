@@ -91,7 +91,7 @@ class BoxChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bindData(message: Message, image: String?) {
             itemView.textSendMessage.text = message.message
             Glide.with(itemView.context).load(image)
-                .apply(RequestOptions().circleCrop().placeholder(R.drawable.no_profile))
+                .apply(RequestOptions().circleCrop().placeholder(R.drawable.ic_user_circle))
                 .into(itemView.imageSendMessage)
             itemView.textSendTime.text = message.time
         }
@@ -107,7 +107,7 @@ class BoxChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun bindData(message: Message, imageUrl: String?) {
             itemView.textReceiveMessage.text = message.message
             Glide.with(itemView.context).load(imageUrl)
-                .apply(RequestOptions().circleCrop().placeholder(R.drawable.no_profile))
+                .apply(RequestOptions().circleCrop().placeholder(R.drawable.ic_user_circle))
                 .into(itemView.imageReceiveMessage)
             itemView.textReceiveTime.text = message.time
         }
